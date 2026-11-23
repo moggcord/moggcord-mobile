@@ -21,6 +21,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipFile;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -43,6 +44,7 @@ public final class MoggcordLoader implements IXposedHookZygoteInit, IXposedHookL
     private volatile Context appContext;
     private boolean hooked;
     private boolean resourceLookupHooked;
+    private boolean localeResourceHooked;
 
     @Override
     public void initZygote(StartupParam param) {
@@ -59,6 +61,14 @@ public final class MoggcordLoader implements IXposedHookZygoteInit, IXposedHookL
                 resourceLookupHooked = true;
             } catch (Throwable error) {
                 Log.w(TAG, "Could not attach the Discord resource name fallback.", error);
+            }
+        }
+        if (DiscordPackage.MOGGCORD.equals(param.packageName) && !localeResourceHooked) {
+            try {
+                hookLocaleResources(param.classLoader, new File(param.appInfo.sourceDir));
+                localeResourceHooked = true;
+            } catch (Throwable error) {
+                Log.w(TAG, "Could not attach the Discord locale resource fallback.", error);
             }
         }
         try {
@@ -145,6 +155,37 @@ public final class MoggcordLoader implements IXposedHookZygoteInit, IXposedHookL
                 Object result = XposedBridge.invokeOriginalMethod(lookup, call.thisObject,
                     new Object[] { alternateName, call.args[1], alternatePackage });
                 if (result instanceof Integer id && id != 0) call.setResult(id);
+            }
+        });
+    }
+
+    private static void hookLocaleResources(ClassLoader loader, File apk) throws ReflectiveOperationException {
+        Class<?> fileModule = Class.forName("com.discord.file_manager.FileModule", false, loader);
+        Method openRawResource = fileModule.getDeclaredMethod("openRawResource", String.class);
+        if (openRawResource.getReturnType() != InputStream.class) {
+            throw new NoSuchMethodException("Discord FileModule.openRawResource no longer returns InputStream");
+        }
+
+        XposedBridge.hookMethod(openRawResource, new XC_MethodHook() {
+            private final AtomicBoolean reported = new AtomicBoolean();
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam call) {
+                if (!(call.getThrowable() instanceof Resources.NotFoundException)
+                        || !(call.args[0] instanceof String name)) return;
+
+                InputStream fallback;
+                try {
+                    fallback = DiscordLocaleResources.open(apk, name);
+                } catch (IOException | SecurityException ignored) {
+                    return;
+                }
+                if (fallback == null) return;
+
+                call.setResult(fallback);
+                if (reported.compareAndSet(false, true)) {
+                    Log.i(TAG, "Recovered a Discord locale resource from the installed APK.");
+                }
             }
         });
     }

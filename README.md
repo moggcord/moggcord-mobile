@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/moggcord/.github/main/profile/assets/moggcord-header.webp" width="900" alt="">
-  <h1>Moggcord Mobile</h1>
+  <img src="https://raw.githubusercontent.com/moggcord/.github/main/profile/assets/moggcord-avatar.png" width="72" height="72" alt="">
+  <h1>Moggcord™ Mobile</h1>
   <p>Plugins, themes and a dedicated Moggcord settings panel for Discord on Android, iPhone and iPad.</p>
   <p>
     <a href="https://moggcord.cc/#download-panel-android"><strong>Android</strong></a> ·
@@ -13,10 +13,12 @@
 
 ## Install Moggcord Mobile
 
-| Platform | What you need | Setup |
-| --- | --- | --- |
-| **Android 9+** | The Moggcord launcher APK and a compatible Discord installation | [Download the launcher](https://moggcord.cc/#download-panel-android) · [Android guide](android/README.md) |
-| **iOS and iPadOS 16+** | An arm64 build and a prepared IPA signed with AltStore Classic or Sideloadly | [iOS downloads](https://moggcord.cc/#download-panel-ios) · [iOS guide](ios/README.md) |
+| Platform | Package | Download size | Guide |
+| --- | --- | ---: | --- |
+| <img src="https://raw.githubusercontent.com/moggcord/.github/main/profile/assets/android.svg" width="20" height="20" alt=""> **Android 9+** | [Launcher APK](https://github.com/moggcord/moggcord-mobile/releases/download/android-v0.4.19/Moggcord-Android.apk) | 19.5 MiB | [Setup](android/README.md) |
+| <img src="https://raw.githubusercontent.com/moggcord/.github/main/profile/assets/apple.svg" width="20" height="20" alt=""> **iOS / iPadOS 16+** | [IPA](https://moggcord.cc/downloads/Moggcord-Mobile-iOS-v0.4.12.ipa) | 103.9 MiB | [Signing guide](ios/README.md) |
+
+Android requires a compatible Discord installation. iOS and iPadOS require an arm64 build and signing with AltStore Classic or Sideloadly. Download sizes refer to the linked packages. Installed storage varies with the Discord installation.
 
 On Android, open the launcher and choose **Install in Discord**. It creates a separate Moggcord app with its own sign-in and settings. On iPhone or iPad, follow the signing steps in the iOS guide. In the installed app, open **Discord Settings → Moggcord Mobile**.
 

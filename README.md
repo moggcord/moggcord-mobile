@@ -1,47 +1,60 @@
 <div align="center">
-  <img src="docs/assets/moggcord-logo.png" width="100" alt="Moggcord logo">
+  <img src="https://raw.githubusercontent.com/moggcord/.github/main/profile/assets/moggcord-header.webp" width="900" alt="">
   <h1>Moggcord Mobile</h1>
-  <p>A native Moggcord settings panel for Discord on Android, iPhone and iPad.</p>
-  <p><a href="https://moggcord.cc">Website</a> · <a href="https://github.com/caedesdev/moggcord">Desktop</a> · <a href="https://github.com/caedesdev/moggcord-mobile/releases/tag/ios-v0.4.0">iOS build kit</a> · <a href="https://github.com/caedesdev/moggcord-mobile/actions/workflows/mobile.yml">Development builds</a></p>
+  <p>Plugins, themes and a dedicated Moggcord settings panel for Discord on Android, iPhone and iPad.</p>
+  <p>
+    <a href="https://moggcord.cc/#download-panel-android"><strong>Android</strong></a> ·
+    <a href="https://moggcord.cc/#download-panel-ios"><strong>iOS and iPadOS</strong></a> ·
+    <a href="https://github.com/moggcord/moggcord-mobile/releases">Releases</a> ·
+    <a href="https://github.com/moggcord/moggcord">Desktop</a> ·
+    <a href="https://github.com/sponsors/caedesdev">Sponsor</a>
+  </p>
 </div>
 
-Moggcord Mobile is a separate project with a shared React Native payload. Open Discord settings and choose **Moggcord Mobile** in the **Moggcord** section.
+## Install Moggcord Mobile
 
-- **Mobile plugins.** 304 mobile implementations are bundled and available from the Plugins tab with search, switches and per-plugin settings. In **Platform Spoofer**, choose a platform and enable **Visible to others** to report it when Discord connects. Fully restart Discord after changing the setting. With the switch off, it previews the icon on your own messages.
-- **Overview.** A cobalt-blue dashboard shows your enabled-plugin count and saved uploads. Four tiles open Plugins, Community, Appearance and Backup; a fixed bottom navigation stays within reach as the content scrolls.
-- **Native user actions.** 21 user-related plugins share entries in profiles, the profile's three-dot menu and message menus. Only enabled plugins contribute actions. PermissionsViewer shows server roles and permission flags without truncating high bits.
-- **In-app mobile updates.** In Moggcord settings, choose **Check for updates**, then **Update and restart**. Requires the 0.4.0 iOS loader or the 0.4.14 Android launcher. Discord and native-loader changes still require a signed app update.
-- **Community library.** Search Moggcord's public plugins and themes and save favorites on your device.
-- **Mobile themes.** Open **Community → Themes → Open Theme Library** to download and apply mobile JSON color themes on Android and iOS. Restart Discord to apply a selection. Use **Use default theme** to reset the colors.
-- **Color profiles.** Switch between Midnight, Cobalt and Dusk for the Moggcord panel.
-- **Backup & Restore.** Export your color profile, favorites and plugin switches as JSON in Settings.
-- **Account profiles.** In Settings, save, share and restore those preferences for the signed-in account. Switch accounts opens Discord's native picker when enabled for the current Discord session.
-- **Quick actions.** Open update checking and the website from Home. Service status remains available in Settings.
-
-The plugin list uses React Native implementations for Discord Mobile. Color profiles style the Moggcord panel.
-
-Read about [signed runtime updates and recovery](docs/in-app-updates.md). PermissionsViewer reports [server permissions](https://docs.discord.com/developers/topics/permissions); channel overwrites and moderation role hierarchy can restrict individual actions.
-
-Message Logger keeps received deleted messages in chat, marks them red and shows edit history. Logs stay in memory. Logging needs Discord to be running and receiving messages; mobile operating systems can suspend it in the background. Closing the app stops logging, and a notification cannot recover content the app never received. Call Timer adds a call-duration overlay. Fake Deafen uses a larger ghost in the camera slot, with Discord's native muted colors and a bounded slash. The camera remains available in the expanded controls. Moggcord's settings entry uses its original full-color logo.
-
-## Platforms
-
-| Platform | Development artifact | Setup |
+| Platform | What you need | Setup |
 | --- | --- | --- |
-| Android 9+ | Launcher APK with the Moggcord module embedded | [Android guide](android/README.md) |
-| iOS and iPadOS 16+ | arm64 dylib with the same embedded bundle | [iOS guide](ios/README.md) |
+| **Android 9+** | The Moggcord launcher APK and a compatible Discord installation | [Download the launcher](https://moggcord.cc/#download-panel-android) · [Android guide](android/README.md) |
+| **iOS and iPadOS 16+** | An arm64 build and a prepared IPA signed with AltStore Classic or Sideloadly | [iOS downloads](https://moggcord.cc/#download-panel-ios) · [iOS guide](ios/README.md) |
 
-The Android launcher uses the installed Discord app to prepare a separate Moggcord copy and opens Android's installation prompt. The iOS dylib needs to be added to a compatible Discord app and signed for the device. Builds contain Moggcord code and its embedded assets.
+On Android, open the launcher and choose **Install in Discord**. It creates a separate Moggcord app with its own sign-in and settings. On iPhone or iPad, follow the signing steps in the iOS guide. In the installed app, open **Discord Settings → Moggcord Mobile**.
 
-## Build
 
-Install Node.js 24. Use the platform guide to build the native artifact after building the shared payload.
+<details>
+  <summary>Android launcher preview</summary>
+  <br>
+  <p align="center">
+    <img src="docs/assets/android-launcher.png" width="260" alt="Moggcord Android launcher in the emulator with Open, Reinstall, and Uninstall actions">
+  </p>
+</details>
 
-```sh
+## What you can customize
+
+| Feature | Where to find it |
+| --- | --- |
+| **Plugins** | Search the bundled mobile plugins and manage switches and per-plugin settings. Enabled plugins can add entries to supported Discord menus. |
+| **Themes** | Browse mobile themes in **Community → Themes → Open Theme Library**. Apply a JSON color theme and restart Discord. Midnight, Cobalt and Dusk style the Moggcord panel. |
+| **Community and favorites** | Browse community uploads and save favorites from the Community tab. |
+| **Backup and profiles** | Use Settings to export your color profile, favorites and plugin switches or restore saved preferences for the account you use. |
+| **Signed runtime updates** | Open **Settings → Moggcord updates** for compatible plugin and UI updates. See the [loader requirements and recovery guide](docs/in-app-updates.md). |
+
+## Build and get help
+
+Use Node.js 24 to test the shared payload. Use the [Android](android/README.md) or [iOS](ios/README.md) guide to build the native loader for that platform.
+
+~~~sh
 npm ci
 npm test
-```
+npm run build
+~~~
 
-`shared/` holds the UI, catalog client and settings adapter. `android/` and `ios/` contain the two loaders. Each packages `dist/moggcord-mobile.js` inside the artifact, so the loader does not fetch executable code at startup.
+The shared React Native code lives in **shared/**. Both platform loaders package the built payload with the native artifact. [Development builds](https://github.com/moggcord/moggcord-mobile/actions/workflows/mobile.yml)
 
-Moggcord Mobile is an independent project. See [credits and licenses](NOTICE.md).
+When reporting a problem, include your device, OS version, Discord build and Moggcord version. [Report an issue](https://github.com/moggcord/moggcord-mobile/issues) · [Community Discord](https://discord.gg/moggcord) · [Service status](https://moggcord.cc/status)
+
+## Support Moggcord
+
+[**Sponsor Moggcord on GitHub**](https://github.com/sponsors/caedesdev). Contributions support mobile development and compatibility work.
+
+Moggcord Mobile is an independent project for Discord. [License](LICENSE) · [Credits and third-party licenses](NOTICE.md)
